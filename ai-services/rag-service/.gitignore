@@ -1,0 +1,104 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+.venv/
+.env/
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.development
+
+# ChromaDB Data
+data/
+chroma/
+*.db
+*.sqlite3
+
+# Document Processing Temp Files
+temp/
+tmp/
+uploads/
+processed/
+*.tmp
+
+# Models and Embeddings Cache
+models/
+embeddings/
+cache/
+.sentence_transformers/
+
+# Logs
+*.log
+logs/
+log/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Docker
+.dockerignore
+
+# Backup files
+*.bak
+*.backup
+
+# Large files that shouldn't be committed
+*.pdf
+*.docx
+*.pptx
+*.xlsx
+*.zip
+*.tar.gz
+*.rar
+
+# But allow small test files in specific directories
+!tests/**/*.pdf
+!tests/**/*.docx
+!examples/**/*.pdf

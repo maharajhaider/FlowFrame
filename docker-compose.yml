@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./server
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - MONGODB_URI=mongodb://mongo:27017/flowframe
+      - ML_SERVICE_URL=http://ml-assignment:8001
+      - RAG_SERVICE_URL=http://rag-service:8002
+      # Basic Configuration
+      - SALT_ROUNDS=10
+      - DEFAULT_ROLE=user
+      - JWT_EXPIRES=1d
+      # Email Configuration
+      - EMAIL_USER=flowframe123@gmail.com
+      - EMAIL_PASSWORD=fhlrzflawemorgsq
+      - CLIENT_URL=http://localhost:5173
+      # JWT Secret
+      - JWT_SECRET=312a0a8fc50d1b00c7dbf942f8c7430deb68eaffa5caabeb94d1a543bf79a24f
+      # AI/ML Configuration
+      - EMBED_SERVER_URL=http://127.0.0.1:5005/embed
+      - TOGETHER_API_KEY=b1790793d629e6209ee825e097d867b891ece86eb5d9ada3c6ba65352333ebee
+      # LLM Provider Configuration
+      - LLM_PROVIDER=gemini
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-4o-mini
+      - TOGETHER_AI_KEY=b1790793d629e6209ee825e097d867b891ece86eb5d9ada3c6ba65352333ebee
+      - TOGETHER_MODEL=meta-llama/Llama-3.3-70B-Instruct-Turbo-Free
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=gemini-2.0-flash-exp
+    depends_on:
+      - mongo
+
+  ml-assignment:
+    build: ./ai-services/ml-assignment
+    ports:
+      - "8001:8001"
+    environment:
+      - ML_SERVICE_PORT=8001
+      - ML_SERVICE_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+      - MERN_API_BASE_URL=http://api:8000
+      - MONGODB_URI=mongodb://mongo:27017/flowframe
+      - ST_MODEL=all-MiniLM-L6-v2
+      - SKILL_WEIGHT=0.4
+      - WORKLOAD_WEIGHT=0.25
+      - EXPERIENCE_WEIGHT=0.2
+      - PRIORITY_WEIGHT=0.15
+      - MAX_WORKLOAD=8
+    depends_on:
+      - mongo
+
+  rag-service:
+    build: ./ai-services/rag-service
+    ports:
+      - "8002:8002"
+    environment:
+      - RAG_SERVICE_PORT=8002
+      - RAG_SERVICE_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+      - CHROMA_PERSIST_DIR=./data/chroma
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - MAX_FILE_SIZE_MB=50
+      - MAX_IMAGE_SIZE_MB=20
+    volumes:
+      - rag_data:/app/data
+    depends_on:
+      - mongo
+
+  web:
+    build: ./client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
+  rag_data:
